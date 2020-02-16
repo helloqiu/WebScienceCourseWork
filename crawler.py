@@ -4,6 +4,8 @@ import logging
 from pymongo import MongoClient
 from urllib.parse import quote_plus
 
+from emotion_lexicon import emolex_words
+
 logging.basicConfig(format='%(asctime)s %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)
@@ -58,13 +60,23 @@ while True:
         continue
 
     tags = [t['text'].lower() for t in tweet['entities']['hashtags']]
-    logging.info(f'Got a tweet which has hashtags: {tags}')
+    logging.debug(f'Got a tweet which has hashtags: {tags}')
+    """
     for hashtag in HASHTAGS:
-        filtered_tags = list(filter(lambda x: hashtag in x, tags))
+        filtered_tags = list(filter(lambda x: hashtag == x, tags))
         if filtered_tags:
             logging.info(
                 f'\tFind hashtags: "{filtered_tags}"\n\tAll hashtags: {tags}')
             collection.insert_one(tweet)
-
-#with open('result.json', 'a') as f:
-#    f.write(json.dumps(result, ensure_ascii=False))
+    """
+    for tag in tags:
+        word = emolex_words[emolex_words.word == tag]
+        if word.empty:
+            continue
+        else:
+            #logging.info(f'\tFind hashtag "{tag}" in emolex lexicon\n{word}\n')
+            try:
+                collection.insert_one(tweet)
+            except Exception as e:
+                logging.error(e)
+            break
