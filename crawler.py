@@ -6,6 +6,7 @@ from urllib.parse import quote_plus
 
 from emotion_lexicon import emolex_words
 
+# setup the logging module
 logging.basicConfig(format='%(asctime)s %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)
@@ -25,10 +26,12 @@ HASHTAGS = []
 for i in HASHTAGS_DICT.keys():
     for j in HASHTAGS_DICT[i]:
         HASHTAGS.append(j)
-print(HASHTAGS)
 
 
 def get_config():
+    """
+    Read the config file.
+    """
     with open('config.json', 'r') as f:
         return json.loads(f.read())
 
@@ -50,7 +53,6 @@ api = twitter.Api(consumer_key=config['consumer_key'],
                   sleep_on_rate_limit=True)
 
 stream = api.GetStreamFilter(languages=['en'], locations=UK_BOUNDS)
-result = []
 
 while True:
     tweet = next(stream)
@@ -58,24 +60,17 @@ while True:
     if not tweet['entities']['hashtags']:
         logging.debug('Got a tweet which does not have hashtags.')
         continue
-
+    # get a list of tags
     tags = [t['text'].lower() for t in tweet['entities']['hashtags']]
     logging.debug(f'Got a tweet which has hashtags: {tags}')
-    """
-    for hashtag in HASHTAGS:
-        filtered_tags = list(filter(lambda x: hashtag == x, tags))
-        if filtered_tags:
-            logging.info(
-                f'\tFind hashtags: "{filtered_tags}"\n\tAll hashtags: {tags}')
-            collection.insert_one(tweet)
-    """
     for tag in tags:
+        # check if the tag is in the emolex lexicon
         word = emolex_words[emolex_words.word == tag]
         if word.empty:
             continue
         else:
-            #logging.info(f'\tFind hashtag "{tag}" in emolex lexicon\n{word}\n')
             try:
+                # store the tweet
                 collection.insert_one(tweet)
             except Exception as e:
                 logging.error(e)
