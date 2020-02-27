@@ -15,13 +15,16 @@ db = client.webscience_course_work
 raw_tweet = db.raw_tweet
 processed_tweet = db.processed_tweet
 
-count = raw_tweet.count()
+# count = raw_tweet.estimated_document_count()
+count = 5000
 i = 0
 
 with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
-    for tweet in raw_tweet.find():
+    for tweet in raw_tweet.find().limit(5000):
+        # update progress
         bar.update(i)
         i += 1
+
         content = tweet['text']
         content = content.lower()
         content = remove_url(content)
@@ -34,4 +37,6 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
             processed_words.append(correct_slang(w))
         processed_text = ' '.join(processed_words)
         tweet['processed_text'] = processed_text
+        #print(tweet['text'])
+        #print(processed_text)
         processed_tweet.insert_one(tweet)
