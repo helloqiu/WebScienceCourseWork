@@ -1,0 +1,95 @@
+\documentclass[12pt,titlepage,oneside]{article}
+\usepackage[T1]{fontenc} % modern encoding
+% Comment out the next three lines of LaTeX if you wish to use Computer Modern fonts
+%   (this is the default for LaTeX)
+% Make sure that your TeX installation can produce good pdf with these fonts.
+% The following three lines are a good alternative if you don't use much mathematics
+\usepackage{mathptmx}  % uses Times for text and mathematics
+\usepackage[scaled]{helvet} %  helvetica for sanserif, scaled 95% by default
+\usepackage{courier}  % courier for typewriter font, pretty ugly but available
+% otherwise the stix package offers more options and symbols
+% \usepackage{stix}  % uses Times for text and a range of fonts for mathematics
+% End of choices for fonts
+\usepackage{graphicx}  % standard package for importing graphics files
+\usepackage{cite}  % improves format of numerical citations, such as [1-3]
+\usepackage[top=2.5cm, bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+% These margins are the university guidelines
+\usepackage[onehalfspacing]{setspace}  % gives one-and-a-half line spacing
+% doublespacing is another option and can be changed in the text
+
+% Indent in the first paragraph.
+\usepackage{indentfirst}
+
+% For showing codes.
+\usepackage{listings}
+\usepackage{color}
+\usepackage{float}
+\usepackage{subcaption}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
+\begin{document}
+\begin{titlepage}
+  \centering
+  \vspace*{3cm}  % Need the * or the space is swallowed at the top of the page
+  \bfseries\Large
+  Web Science Course Work: Social	Media	Emotion	Data	Set\\
+  \vspace{3cm}
+  \normalfont\large
+  Yuyang Zhang (2414208z)\\
+  \vspace{1cm}
+  Source Code: TODO\\
+  Data Link: TODO\\
+  % \vspace{2cm}
+  % Submitted in fulfilment of the requirements for the\\
+  % Degree of Doctor of Philosophy\\
+  \vspace{2cm}
+  College of Science and Engineering\\
+  University of Glasgow\\
+  \vspace{1cm}
+  \includegraphics[scale=0.125]{GlaLogo.pdf}
+  \\
+  \vspace{1cm}
+  % Insert month and year of date deposited with library for final version
+  March 2020
+\end{titlepage}
+% \frontmatter  % Turn off chapter numbering, use roman page numbers
+% \include{abstract}
+\tableofcontents
+% \listoftables
+% \listoffigures
+% \include{declaration}
+
+% \mainmatter % Turn on chapter numbering, reset page numbers, use arabic
+\include{introduction}
+\include{data_craw_and_rules}
+\include{crowd_sourcing}
+% \include{conclusion}
+% and the other chapters
+\appendix
+% \backmatter  % Turn off chapter numbering
+% I assume that the bibliography is assembled by hand.
+% Change the file if you use bibtex or something like that.
+\include{bibliography}
+
+\end{document}
