@@ -34,7 +34,8 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
         content = content.lower()
         content = remove_url(content)
         content = remove_username(content)
-        content = translate_emo(content)
+        emoticons = translate_emo(content)
+        tweet['emoticons'] = emoticons
         content = content.lower().strip()
         words = nltk.word_tokenize(content)
         processed_words = []

@@ -9,6 +9,7 @@ import progressbar
 
 TEXT_SCORE = 0.5
 TAG_SCORE = 1.0
+EMOTICON_SCORE = 3.0
 
 TAGS = {
     'anger': 'angry',
@@ -76,6 +77,8 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
                     continue
                 for e in NRC_EMOTIONS:
                     weight[TAGS[e]] += int(getattr(word, e)) * TAG_SCORE
+        for emoticon in tweet['emoticons']:
+            weight[emoticon] += EMOTICON_SCORE
 
         max_emotion = max(weight.items(), key=operator.itemgetter(1))[0]
         tweet['emotions_weight'] = weight

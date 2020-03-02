@@ -12,6 +12,9 @@ SLANG = {}
 for s in string.ascii_lowercase:
     SLANG[s] = re.compile(s + r'{3,}')
 
+with open('emoticons_emotion.json', 'r') as f:
+    EMOTICONS_EMOTION = json.loads(f.read())
+
 
 def correct_slang(word):
     """
@@ -40,7 +43,7 @@ def remove_username(content):
 
 def translate_emo(content):
     """
-    translate all emojis and emoticons in a sentence
+    translate all emoticons in a sentence
     """
     """
     # translate unicode eomji to words
@@ -50,7 +53,6 @@ def translate_emo(content):
                 r'(' + k + ')',
                 " ".join(v.replace(",", "").replace(":", "").split()) + " ",
                 content)
-    """
     # translate emoticons to words
     for k, v in EMOTICONS.items():
         if k in content:
@@ -58,6 +60,12 @@ def translate_emo(content):
     # replace unecessary chars
     content = content.replace("_", " ").replace("-", " ")
     return content
+    """
+    result = []
+    for k, v in EMOTICONS_EMOTION.items():
+        if k in content:
+            result.append(v)
+    return result
 
 
 def get_config():
