@@ -1,0 +1,46 @@
+digraph G {
+
+node[shape="box", style="rounded"]
+start; end;
+node[shape="box", style=""]
+ignore; store;
+lower_case;
+url_username;
+emoticons;
+tokenize;
+slang;
+
+node[shape="diamond", style=""]
+if_text;
+if_id;
+if_same_text;
+
+if_text[label="if the tweet has\unhbox \voidb@x \bgroup \let \unhbox \voidb@x \setbox \@tempboxa \hbox {t\global \mathchardef \accent@spacefactor \spacefactor }\accent 4 t\egroup \spacefactor \accent@spacefactor ext\unhbox \voidb@x \bgroup \let \unhbox \voidb@x \setbox \@tempboxa \hbox {p\global \mathchardef \accent@spacefactor \spacefactor }\accent 4 p\egroup \spacefactor \accent@spacefactor roperty"];
+if_id[label="if there is a tweetwith the same ID"];
+if_same_text[label="if there is a tweet has the same text"];
+lower_case[label="convert text to lowercases"];
+url_username[label="remove urls andusernames in text"];
+emoticons[label="translate emoticons to emotions"];
+slang[label="correct slangs"];
+
+start -> if_text;
+
+if_text -> ignore[label="no"];
+if_text -> if_id[label="yes"];
+
+if_id -> ignore[label="yes"];
+if_id -> if_same_text[label="no"];
+
+if_same_text -> ignore[label="yes"];
+if_same_text -> lower_case[label="no"];
+
+lower_case -> url_username;
+url_username -> emoticons;
+emoticons -> tokenize;
+tokenize -> slang;
+slang -> store;
+
+
+ignore -> end;
+store -> end;
+}

@@ -1,6 +1,6 @@
 \section{Data Craw and Rules}
 
-\subsection{Twitter API}
+\subsection{Tweets Fetching}
 
 In this coursework, data were collected by using the streaming API provided by Twitter \cite{twitter_streaming}. In order to fetch the data more easily, the \textit{twitter} package was used in the python codes.
 
@@ -12,10 +12,89 @@ api = twitter.Api(consumer_key=config['consumer_key'],
                 access_token_secret=config['access_token_secret'],
                 sleep_on_rate_limit=True)
 
-stream = api.GetStreamFilter(languages=['en'], locations=UK_BOUNDS)
+stream = api.GetStreamFilter(languages=['en'],
+                locations=UK_BOUNDS,
+                track=KEYWORDS)
 \end{lstlisting}
 
-As shown in Code \ref{fetch_tweets}, there are two parameters assigning to the streaming API: \textit{languages} and \textit{locations}. As required, the \textit{languages} are set to English only, and the locations of the tweets are limited within the UK. After connecting to the streaming API, a HTTP connection will be establised and Twitter's server will keep pushing matched tweets to the crawler client.
+As shown in Code \ref{fetch_tweets}, there are three parameters assigning to the streaming API: \textit{languages}, \textit{track} and \textit{locations}. As required, the \textit{languages} are set to English only, and the locations of the tweets are limited within the UK. After connecting to the streaming API, a HTTP connection will be establised and Twitter's server will keep pushing matched tweets to the crawler client. The crawler then will store all collected tweets to the MongoDB as raw tweets. 
 
-\subsection{Raw Data Statistics}
-The crawler stores all collected tweets to the MongoDB as raw tweets. 
+\subsection{Pre-processing}
+
+In order to analyse tweets, a stage of pre-processing has been added to the whole process. The flow chart of this procedure is shown in Figure \ref{pre_processing}.
+
+\begin{lstlisting}[caption={Regular Expression},captionpos=b,label={regex}]
+    URL = re.compile(
+        r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+
+        [a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+
+        [a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www)[a-zA-Z0-9]
+        +\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'
+    )
+    USERNAME = re.compile(r'@[a-zA-Z0-9_]{0,15}')
+\end{lstlisting}
+
+In this process, first, the tweet is filtered by checking if it has "text" property and if there is a tweet with the same ID or text stored in the database. Then, urls and usernames such as "@someone" are removed by using regular expressions which are shown in Code \ref{regex}, and emoticons are translated to emotions which are added to the tweet object as an extra property. After that, the text content is tokenized by using the \textit{nltk} package, and then the slangs such as "looove" are converted to "love". Finally, the tweet is stored into a new collection for further processing.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./"pre_process".pdf}
+    \caption{Flow Chart of Pre-processing}
+    \label{pre_processing}
+\end{figure}
+
+\subsection{Categorization}
+
+After the pre-processing, the tweet can be categorized into classes according to the text, emoticons and hashtags.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+         & text & emoticon & hashtag \\ \hline
+        \textbf{mark} & \multicolumn{1}{c|}{0.5} & \multicolumn{1}{c|}{3.0} & \multicolumn{1}{c|}{3.0} \\ \hline
+    \end{tabular}
+    \caption{Marks}
+    \label{marks}
+\end{table}
+
+This process is done by calculating the weight for each emotion. The marks of these three properties are shown in Table \ref{marks}.
+
+The weight from text is calculated according to NRC lexicon. Every word of the text will be searched for in it. There are 10 emotions in the lexicon. So, these emotions are mapped to the six classes.
+
+\begin{lstlisting}[caption={NRC Lexicon Map},captionpos=b,label={nrc}]
+TAGS = {
+    'anger': 'angry',
+    'disgust': 'fear',
+    'fear': 'fear',
+    'joy': 'happy',
+    'sadness': 'surprise',
+    'surprise': 'surprise',
+    'negative': 'surprise',
+    'positive': 'pleasant',
+    'trust': 'pleasant',
+    'anticipation': 'excitement',
+}
+\end{lstlisting}
+
+The weight from emoticon is calculated by iterating through the "emoticon" property added by pre-processing. It can be directly added to the six emotions.
+
+The weight from hashtag is calculated in the same way of text. The emotions of the hashtags are from the NRC lexicon.
+
+\begin{lstlisting}[caption={Tweet Example},captionpos=b,label={example}]
+    ...
+    {
+        "emotions_weight":{
+          "excitement":0.5,
+          "happy":1.0,
+          "pleasant":4.5,
+          "surprise":0,
+          "fear":0,
+          "angry":0
+        },
+        "emotion":"pleasant",
+        "max_emotion_weight":4.5
+    }
+    ...
+\end{lstlisting}
+
+After the categorization process, an example of the output is shown in Code \ref{example}.

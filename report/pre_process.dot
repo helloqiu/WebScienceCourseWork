@@ -1,0 +1,46 @@
+digraph G {
+
+  node[shape="box", style="rounded"]
+  start; end;
+  node[shape="box", style=""]
+  ignore; store;
+  lower_case;
+  url_username;
+  emoticons;
+  tokenize;
+  slang;
+  
+  node[shape="diamond", style=""]
+  if_text;
+  if_id;
+  if_same_text;
+  
+  if_text[label="if the tweet has\n \"text\" property"]
+  if_id[label="if there is a tweet\n with the same ID"]
+  if_same_text[label="if there is a tweet \n has the same text"]
+  lower_case[label="convert text to lowercases"]
+  url_username[label="remove urls and\n usernames in text"]
+  emoticons[label="translate emoticons to emotions"]
+  slang[label="correct slangs"]
+  
+  start -> if_text;
+  
+  if_text -> ignore[label="no"]
+  if_text -> if_id[label="yes"]
+  
+  if_id -> ignore[label="yes"]
+  if_id -> if_same_text[label="no"]
+  
+  if_same_text -> ignore[label="yes"]
+  if_same_text -> lower_case[label="no"]
+  
+  lower_case -> url_username
+  url_username -> emoticons
+  emoticons -> tokenize
+  tokenize -> slang
+  slang -> store
+  
+  
+  ignore -> end;
+  store -> end;
+}
