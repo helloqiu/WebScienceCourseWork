@@ -42,6 +42,7 @@ def translate_emo(content):
     """
     translate all emojis and emoticons in a sentence
     """
+    """
     # translate unicode eomji to words
     for k, v in UNICODE_EMO.items():
         if k in content:
@@ -49,6 +50,7 @@ def translate_emo(content):
                 r'(' + k + ')',
                 " ".join(v.replace(",", "").replace(":", "").split()) + " ",
                 content)
+    """
     # translate emoticons to words
     for k, v in EMOTICONS.items():
         if k in content:

@@ -13,6 +13,14 @@ logging.basicConfig(format='%(asctime)s %(message)s',
                     level=logging.INFO)
 
 UK_BOUNDS = ['-7.57216793459, 49.959999905', '1.68153079591, 58.6350001085']
+KEYWORDS = [
+    'excitement',
+    'happy',
+    'pleasant',
+    'surprise',
+    'fear',
+    'angry',
+]
 
 config = get_config()
 
@@ -22,7 +30,7 @@ uri = "mongodb://%s:%s@%s" % (quote_plus(
 
 client = MongoClient(uri)
 db = client.webscience_course_work
-collection = db.raw_tweet
+collection = db.raw_tweet_with_keywords
 
 api = twitter.Api(consumer_key=config['consumer_key'],
                   consumer_secret=config['consumer_secret'],
@@ -30,7 +38,9 @@ api = twitter.Api(consumer_key=config['consumer_key'],
                   access_token_secret=config['access_token_secret'],
                   sleep_on_rate_limit=True)
 
-stream = api.GetStreamFilter(languages=['en'], locations=UK_BOUNDS)
+stream = api.GetStreamFilter(languages=['en'],
+                             locations=UK_BOUNDS,
+                             track=['angry'])
 
 total = 0
 
@@ -42,6 +52,4 @@ while True:
         collection.insert_one(tweet)
     except Exception as e:
         logging.error(e)
-    print("\033[1A")
-    print("\033[K")
     print(f'Total Number of Tweets: {total}')

@@ -41,8 +41,8 @@ uri = "mongodb://%s:%s@%s" % (quote_plus(
 
 client = MongoClient(uri)
 db = client.webscience_course_work
-processed_tweet = db.processed_tweet
-marked_tweet = db.marked_tweet
+processed_tweet = db.processed_tweet_with_keywords
+marked_tweet = db.marked_tweet_with_keywords
 
 count = processed_tweet.estimated_document_count()
 i = 0
@@ -51,6 +51,10 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
     for tweet in processed_tweet.find():
         bar.update(i)
         i += 1
+
+        if marked_tweet.count_documents({'id': tweet['id']}) > 0:
+            continue
+
         for e in EMOTIONS:
             weight = {emotion: 0 for emotion in EMOTIONS}
         # marking based on text content

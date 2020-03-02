@@ -12,18 +12,23 @@ uri = "mongodb://%s:%s@%s" % (quote_plus(
 
 client = MongoClient(uri)
 db = client.webscience_course_work
-raw_tweet = db.raw_tweet
-processed_tweet = db.processed_tweet
+raw_tweet = db.raw_tweet_with_keywords
+processed_tweet = db.processed_tweet_with_keywords
 
-# count = raw_tweet.estimated_document_count()
-count = 5000
+count = raw_tweet.estimated_document_count()
 i = 0
 
 with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
-    for tweet in raw_tweet.find().limit(5000):
+    for tweet in raw_tweet.find():
         # update progress
         bar.update(i)
         i += 1
+
+        if 'text' not in tweet:
+            continue
+
+        if processed_tweet.count_documents({'id': tweet['id']}) > 0:
+            continue
 
         content = tweet['text']
         content = content.lower()
