@@ -1,1 +1,20 @@
 \section{Data Craw and Rules}
+
+\subsection{Twitter API}
+
+In this coursework, data were collected by using the streaming API provided by Twitter \cite{twitter_streaming}. In order to fetch the data more easily, the \textit{twitter} package was used in the python codes.
+
+
+\begin{lstlisting}[caption={Fetch Tweets},captionpos=b,label={fetch_tweets}]
+api = twitter.Api(consumer_key=config['consumer_key'],
+                consumer_secret=config['consumer_secret'],
+                access_token_key=config['access_token_key'],
+                access_token_secret=config['access_token_secret'],
+                sleep_on_rate_limit=True)
+
+stream = api.GetStreamFilter(languages=['en'], locations=UK_BOUNDS)
+\end{lstlisting}
+
+As shown in Code \ref{fetch_tweets}, there are two parameters assigning to the streaming API: \textit{languages} and \textit{locations}. As required, the \textit{languages} are set to English only, and the locations of the tweets are limited within the UK.
+
+After connecting to the streaming API, a HTTP connection will be establised and Twitter's server will keep pushing matched tweets to the crawler client. The crawler stores all data into the MongoDB for further processing.
