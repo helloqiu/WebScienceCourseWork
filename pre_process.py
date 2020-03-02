@@ -11,9 +11,12 @@ uri = "mongodb://%s:%s@%s" % (quote_plus(
         config['mongo_password']), quote_plus(config['mongo_host']))
 
 client = MongoClient(uri)
-db = client.webscience_course_work
-raw_tweet = db.raw_tweet_with_keywords
-processed_tweet = db.processed_tweet_with_keywords
+db = client.webscience
+raw_tweet = db.raw_tweet
+processed_tweet = db.processed_tweet
+
+processed_tweet.create_index("id")
+processed_tweet.create_index("text")
 
 count = raw_tweet.estimated_document_count()
 i = 0
@@ -26,8 +29,11 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
 
         if 'text' not in tweet:
             continue
-
+        # ignore tweets with same id
         if processed_tweet.count_documents({'id': tweet['id']}) > 0:
+            continue
+        # ignore tweets with same text content
+        if processed_tweet.count_documents({'text': tweet['text']}) > 0:
             continue
 
         content = tweet['text']

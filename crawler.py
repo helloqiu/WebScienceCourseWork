@@ -29,8 +29,8 @@ uri = "mongodb://%s:%s@%s" % (quote_plus(
         config['mongo_password']), quote_plus(config['mongo_host']))
 
 client = MongoClient(uri)
-db = client.webscience_course_work
-collection = db.raw_tweet_with_keywords
+db = client.webscience
+collection = db.raw_tweet
 
 api = twitter.Api(consumer_key=config['consumer_key'],
                   consumer_secret=config['consumer_secret'],
@@ -40,7 +40,7 @@ api = twitter.Api(consumer_key=config['consumer_key'],
 
 stream = api.GetStreamFilter(languages=['en'],
                              locations=UK_BOUNDS,
-                             track=['angry'])
+                             track=KEYWORDS)
 
 total = 0
 
