@@ -80,6 +80,7 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
                     continue
                 for e in result['emotions']:
                     weight[TAGS[e]] += TAG_SCORE
+        # marking based on emoticons
         for emoticon in tweet['emoticons']:
             weight[emoticon] += EMOTICON_SCORE
 

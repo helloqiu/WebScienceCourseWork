@@ -74,3 +74,14 @@ def get_config():
     """
     with open('config.json', 'r') as f:
         return json.loads(f.read())
+
+
+def get_extended_text_or_text(tweet):
+    if 'text' not in tweet.keys():
+        return None
+    text = tweet['text']
+    if 'extended_tweet' in tweet.keys():
+        extended_tweet = tweet['extended_tweet']
+        if 'full_text' in extended_tweet.keys():
+            text = extended_tweet['full_text']
+    return text

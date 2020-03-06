@@ -1,4 +1,4 @@
-from utils import get_config, remove_url, remove_username, translate_emo, correct_slang
+from utils import get_config, remove_url, remove_username, translate_emo, correct_slang, get_extended_text_or_text
 from pymongo import MongoClient
 from urllib.parse import quote_plus
 import nltk
@@ -27,16 +27,28 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
         bar.update(i)
         i += 1
 
-        if 'text' not in tweet:
+        # get text
+        if 'text' not in tweet.keys():
             continue
+        # use extended text for extended tweets
+        text = get_extended_text_or_text(tweet)
+        if text is None:
+            continue
+        # use original text or extended text for retweets
+        if 'retweeted_status' in tweet.keys():
+            original_text = get_extended_text_or_text(
+                tweet['retweeted_status'])
+            if original_text is not None:
+                text = original_text
+
         # ignore tweets with same id
         if processed_tweet.count_documents({'id': tweet['id']}) > 0:
             continue
         # ignore tweets with same text content
-        if processed_tweet.count_documents({'text': tweet['text']}) > 0:
+        if processed_tweet.count_documents({'text': text}) > 0:
             continue
 
-        content = tweet['text']
+        content = text
         content = content.lower()
         content = remove_url(content)
         content = remove_username(content)
@@ -49,6 +61,4 @@ with progressbar.ProgressBar(max_value=count, redirect_stdout=True) as bar:
             processed_words.append(correct_slang(w))
         processed_text = ' '.join(processed_words)
         tweet['processed_text'] = processed_text
-        #print(tweet['text'])
-        #print(processed_text)
         processed_tweet.insert_one(tweet)
