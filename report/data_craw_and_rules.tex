@@ -13,11 +13,11 @@ api = twitter.Api(consumer_key=config['consumer_key'],
                 sleep_on_rate_limit=True)
 
 stream = api.GetStreamFilter(languages=['en'],
-                locations=UK_BOUNDS,
-                track=KEYWORDS)
+               locations=UK_BOUNDS,
+               track=keywords)
 \end{lstlisting}
 
-As shown in Code \ref{fetch_tweets}, there are three parameters assigning to the streaming API: \textit{languages}, \textit{track} and \textit{locations}. As required, the \textit{languages} are set to English only, and the locations of the tweets are limited within the UK. After connecting to the streaming API, a HTTP connection will be establised and Twitter's server will keep pushing matched tweets to the crawler client. The crawler then will store all collected tweets to the MongoDB as raw tweets. 
+As shown in Code \ref{fetch_tweets}, there are three parameters assigning to the streaming API: \textit{languages}, \textit{track} and \textit{locations}. As required, languages are set to English only, and the locations of the tweets are limited within the UK. To get more tweets related to the six emotion classes, keywords are set to the related words according to the NRC lexicon. After connecting to the streaming API, a HTTP connection will be establised and Twitter's server will keep pushing matched tweets to the crawler client. The crawler then will store all collected tweets to the MongoDB as raw tweets. 
 
 \subsection{Pre-processing}
 
@@ -33,7 +33,7 @@ In order to analyse tweets, a stage of pre-processing has been added to the whol
     USERNAME = re.compile(r'@[a-zA-Z0-9_]{0,15}')
 \end{lstlisting}
 
-In this process, first, the tweet is filtered by checking if it has "text" property and if there is a tweet with the same ID or text stored in the database. Then, urls and usernames such as "@someone" are removed by using regular expressions which are shown in Code \ref{regex}, and emoticons are translated to emotions which are added to the tweet object as an extra property. After that, the text content is tokenized by using the \textit{nltk} package, and then the slangs such as "looove" are converted to "love". Finally, the tweet is stored into a new collection for further processing.
+In this process, first, the tweet is filtered by checking if it has "text" property and if there is a tweet with the same ID or text stored in the database. If the the tweet is a retweet, the text or extended text of the original tweet will be used, and if it is a extended tweet, the extended text will be used. Then, urls and usernames such as "@someone" are removed by using regular expressions which are shown in Code \ref{regex}, and emoticons are translated to emotions which are added to the tweet object as an extra property. After that, the text content is tokenized by using the \textit{nltk} package, and then the slangs such as "looove" are converted to "love". Finally, the tweet is stored into a new collection for further processing.
 
 \begin{figure}[ht]
     \centering

@@ -1,1 +1,71 @@
 \section{Crowdsourcing}
+
+To analyse the accuracy of the categorization, the crowdsourcing method has been used.
+
+\subsection{Data}
+For each emotion class, 20 tweets are randomly extracted as a sample. The contributors are asked to judge the emotion of the provided content.
+
+The crowdsourcing process is performed on \textit{Figure Eight} platform. A sample of the input data is shown in Figure \ref{data_sample}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{./"data_sample".png}
+    \caption{Data Sample}
+    \label{data_sample}
+\end{figure}
+
+The text extracted from the tweets are the only contents that are provided to the contributors. 
+
+\subsection{Question}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./"question".png}
+    \caption{Crowdsourcing Question Design}
+    \label{question}
+\end{figure}
+
+The question design for the crowdsourcing is shown in figure \ref{question}. We provide the text to the contributors and ask them about what the author's sentiment of this post is.
+
+\subsection{Quality}
+
+In order to guarantee the quality of the judgement, some test questions has been created manully in the process of crowdsourcing. The missed percentage and number of judgment are shown in Table \ref{test_questions_table}.
+
+\begin{table}[ht]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{missed percentage} & \textbf{number of judgments} & \textbf{answers} & \textbf{text} \\ \hline
+0.01 & 100 & \begin{tabular}[c]{@{}l@{}}excitement\\     happy\\     pleasant\end{tabular} & \begin{tabular}[c]{@{}l@{}}@whitewinery St. Basil's is\\   beautiful. Orthodox have some beautiful cathedrals - like this:\\   https://t.co/HAa2emZhCc\end{tabular} \\ \hline
+    0.22 & 94 & angry & @eruditechalamet Hot damn \\ \hline
+    0.22 & 87 & happy & \begin{tabular}[c]{@{}l@{}}@OuamroucheH @chancetotravel\\   @MuchMorocco @Visit\_Morocco\_ Thankyou, we love ? Morocco ?? too. I’m glad to\\   hear it ?\end{tabular} \\ \hline
+    0.23 & 79 & angry & \begin{tabular}[c]{@{}l@{}}love clingy but if im angry or its\\   hot out? you need to back the fuck up\end{tabular} \\ \hline
+    0.42 & 12 & angry & \begin{tabular}[c]{@{}l@{}}Fuck what y’all Talkin bout uzi\\   album hot as shit ????\end{tabular} \\ \hline
+    0.29 & 17 & \begin{tabular}[c]{@{}l@{}}happy\\     pleasant\end{tabular} & \begin{tabular}[c]{@{}l@{}}@KaraboTebedi Your skin looks like\\   those beautiful stones that you can find that have these shapes and colors\\   which make them beautiful\end{tabular} \\ \hline
+    0.71 & 17 & surprise & \begin{tabular}[c]{@{}l@{}}\#BREAKING:Why won't @USArmy\\   CONFIRM OR DENY whether @senatemajldr,one of the most powerful politicians\\   who's currently up for reelection,was EVER the subject of a court\\   martial?\\     \\     \#TheResistance \#MitchMcConnell \#CNN \#MSNBC \#Yahoo \#mondaythoughts\\   \#FBRParty\\     https://t.co/dkpzf4x0Pz\end{tabular} \\ \hline
+    0.5 & 12 & \begin{tabular}[c]{@{}l@{}}pleasant\\     angry\end{tabular} & \begin{tabular}[c]{@{}l@{}}@jendoesthething Minori, you are\\   NOT a delinquent.\\     \\     Takeru is just, you know, a type. Kinda tsun, hot cosplayer, athletic.\end{tabular} \\ \hline
+    0.13 & 15 & \begin{tabular}[c]{@{}l@{}}surprise\\     fear\\     angry\end{tabular} & \begin{tabular}[c]{@{}l@{}}Should we hold our breath waiting\\   for you to condemn Senator Schumer's threats against 2 Supreme Court\\   justices?\\     https://t.co/y55ztSFjSb\end{tabular} \\ \hline
+    0.31 & 13 & \begin{tabular}[c]{@{}l@{}}fear\\     angry\end{tabular} & WHY is she threatening a god? \\ \hline
+    0.29 & 14 & fear & \begin{tabular}[c]{@{}l@{}}'What's the worst that could\\   happen' oh no, I already know something bad is gonna happen\end{tabular} \\ \hline    
+    \end{tabular}}
+    \caption{Test Questions}
+    \label{test_questions_table}
+    \end{table}
+
+\subsection{Accuracy Result}
+
+From the result of the crowdsourcing, we can roughly calculate the accuracy of the classfication.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{../"accuracy".pdf}
+    \caption{Accuracy}
+    \label{accuracy}
+\end{figure}
+
+As shown in Figure \ref{accuracy}, the class with the highest accuracy is happy, and the class with the lowest accuracy is pleasant. The overall accuracy is around 0.3. This may be caused by the fact that many words from the NRC lexicon have emotional overlaps, and the difference between happy, pleasant, surprise is vague.
+
+\section{Conclusion}
+
+In this assignment, an emotion annotated data set from Twitter has been built. The strategies of classfication has been shown, and the crowdsourcing has been used to check the accuracy. In the result, we find that different classes have different accuracy, and this is probabily caused by emotional overlaps of the keywords.
