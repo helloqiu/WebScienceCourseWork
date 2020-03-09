@@ -11,7 +11,7 @@ services:
     ports:
       - 127.0.0.1:27017:27017
     volumes:
-      - /home/helloqiu/code/python/WebScienceCourseWork/data:/data/db
+      - ./data:/data/db
 
   mongo-express:
     image: mongo-express
