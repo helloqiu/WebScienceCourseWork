@@ -1,5 +1,8 @@
 # WebScienceCourseWork
 Web science course work.
+## Result Data
+You can find result data at [https://github.com/helloqiu/WebScienceCourseWork/releases/download/1.0/result_data.tar.gz](https://github.com/helloqiu/WebScienceCourseWork/releases/download/1.0/result_data.tar.gz).
+
 ## How to Run
 1. Download the MongoDB file from [https://github.com/helloqiu/WebScienceCourseWork/releases/download/1.0/mongo_sample.tar.gz](https://github.com/helloqiu/WebScienceCourseWork/releases/download/1.0/mongo_sample.tar.gz).  
 Extract it by command:
@@ -54,4 +57,5 @@ python categorize.py
 
 ## Data
 `crowdsourcing_input.csv` contains the data for crowdsourcing.  
-`cf_report_1556720_full.csv` contains the data returned by Figure Eight.
+`cf_report_1556720_full.csv` contains the data returned by Figure Eight.  
+You can find the result data at [https://github.com/helloqiu/WebScienceCourseWork/releases/download/1.0/result_data.tar.gz](https://github.com/helloqiu/WebScienceCourseWork/releases/download/1.0/result_data.tar.gz).
