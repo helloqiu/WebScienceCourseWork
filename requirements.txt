@@ -8,7 +8,7 @@ emot==2.1
 future==0.18.2
 idna==2.8
 inexactsearch==1.0.2
-ipython==7.12.0
+ipython==7.16.3
 ipython-genutils==0.2.0
 jedi==0.16.0
 kiwisolver==1.1.0
